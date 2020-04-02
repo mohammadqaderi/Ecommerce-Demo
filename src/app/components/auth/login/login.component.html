@@ -1,1 +1,61 @@
-<p>login works!</p>
+<div class="row">
+  <div class="col-md-6 mx-auto">
+    <div class="card rounded-0">
+      <div class="card-header">
+        <h3 class="mb-0">
+          Login
+        </h3>
+      </div>
+      <div class="card-body">
+        <form class="form" novalidate [formGroup]="authCredentialsDto" (ngSubmit)="userLogin()">
+          <p>
+            <mat-form-field appearance="fill" style="width: 100%">
+              <mat-label>User Name</mat-label>
+              <input formControlName="username" matInput id="username" name="username" type="text" required>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Password</mat-label>
+              <input formControlName="password"
+                     matInput id="password" [type]="showPass ? 'password': 'text'"
+                     name="password" type="text" required>
+              <button type="button" mat-icon-button matSuffix (click)="showPass = !showPass"
+                      [attr.aria-label]="'Hide password'">
+                <mat-icon>{{showPass ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+          </p>
+          <div class="row justify-content-end">
+            <button type="submit" [disabled]="!authCredentialsDto.valid"
+                    class="btn btn-outline-success pull-right float-right">
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #invalidCredentials>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      Invalid Credentials
+    </h4>
+    <button type="button" (click)="hide()" class="close pull-right" aria-label="Close"
+    ><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body text-center">
+    <div class="alert alert-danger" role="alert">
+      Either Username or Password are incorrect!!
+    </div>
+    <button type="button" class="btn btn-danger" (click)="authCredentialsDto.reset(); hide()">
+      Try Again!
+    </button>
+  </div>
+</ng-template>

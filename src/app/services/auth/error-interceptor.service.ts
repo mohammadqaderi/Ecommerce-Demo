@@ -33,7 +33,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
               "Error-Status": err.status
             }
           });
-        } else {
+        } else if (err.status === 500) {
           this.router.navigate(["/applicationError", err.status], {
             queryParams: {
               "Error-Status": err.status

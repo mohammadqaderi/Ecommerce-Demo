@@ -33,6 +33,7 @@ import {
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {TokenInterceptorService} from "./services/auth/token-interceptor.service";
 import {ErrorInterceptorService} from "./services/auth/error-interceptor.service";
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import {ErrorInterceptorService} from "./services/auth/error-interceptor.service
     AlertComponent,
     ApplicationErrorComponent,
     PageNotFoundComponent,
-    ResourceNotFoundComponent
+    ResourceNotFoundComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
