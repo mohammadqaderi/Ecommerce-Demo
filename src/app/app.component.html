@@ -1,0 +1,52 @@
+<mat-toolbar color="primary" class="example-header">
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <a mat-button>GTS Website</a>
+    <div class="col-md-7 justify-content-start">
+      <a mat-button>Home</a>
+      <a mat-button>Contact Us</a>
+      <a mat-button>Products</a>
+    </div>
+    <div class="col-md-5 justify-content-end">
+      <a mat-button>Login</a>
+      <a mat-button>Register</a>
+      <a mat-button [matMenuTriggerFor]="managementMenu">Management</a>
+      <mat-menu #managementMenu="matMenu">
+        <a mat-menu-item>Dashboard</a>
+        <a mat-menu-item>M-Categories</a>
+        <a mat-menu-item>M-Users</a>
+      </mat-menu>
+      <a mat-button [matMenuTriggerFor]="userMenu">User</a>
+      <a mat-button
+         style=" font-size: 23px">
+        <i style="font-size: 23px" class="fas fa-cart-plus" matBadge="5"
+           matBadgeOverlap="false"
+           matBadgePosition="above after" matBadgeSize="medium"
+           matBadgeColor="warn"></i>
+      </a>
+      <mat-menu #userMenu="matMenu">
+        <a mat-menu-item>Profile</a>
+        <a mat-menu-item>Orders</a>
+        <a mat-menu-item>Logout</a>
+      </mat-menu>
+    </div>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+<ng-container>
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav mode="side" opened class="example-sidenav justify-content-center
+   text-center" [fixedInViewport]="false">
+
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <mat-toolbar class="example-footer">
+    GTS Website
+  </mat-toolbar>
+</ng-container>
+
