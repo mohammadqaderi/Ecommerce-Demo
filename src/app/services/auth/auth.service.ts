@@ -8,13 +8,17 @@ import {Profile} from "../../models/profile";
 import {Cart} from "../../models/cart";
 import {CartItem} from "../../models/cart-item";
 import {UserData} from "../../models/user-data";
+import {CartService} from "../cart/cart.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private cartService: CartService
+  ) {
   }
 
   _registerUrl = `http://localhost:3000/auth/register`;
@@ -23,31 +27,27 @@ export class AuthService {
   _profileUrl = `http://localhost:3000/profile`;
   private _usersURL = `http://localhost:3000/auth/system-users`;
   private _userDataURL = `http://localhost:3000/auth/user-main-data`;
+
   private imageChangeUrl = `http://localhost:3000/profile/userprofile/changeprofileimage`;
   private newImageUrl = `http://localhost:3000/profile/userprofile/setprofileimage`;
   private contactUrl = `http://localhost:3000/contacts/new-mail`;
-  private errorHandler: ErrorHandler = new ErrorHandler();
-
-  public currentUser: User;
-  public profile: Profile;
+  errorsHandler = new ErrorHandler();
+  public username: string;
   public cart: Cart;
   public cartItem: CartItem;
-  public username: string;
+  public profile: Profile;
+  public currentUser: User;
 
-
-  register(data: any): Observable<any> {
-    try {
-      return this.http.post<any>(this._registerUrl, data);
-    } catch (error) {
-      this.errorHandler.handleError(error);
-    }
+  registerUser(registrationInfo): Observable<void> {
+    return this.http.post<void>(this._registerUrl, registrationInfo);
   }
 
-  pUserData() {
+  prepareUserData() {
     if (this.isLoggedIn()) {
-      this.prepareUserData().subscribe((uData: UserData) => {
+      this.pUserData().subscribe(uData => {
         this.profile = uData.profile;
-        this.username = `${uData.profile.firstname} ${uData.profile.lastname}`;
+        this.username = `${uData.profile.firstname}
+        ${uData.profile.lastname}`;
         this.cart = uData.cart;
         this.cartItem = uData.cartItem;
       });
@@ -57,64 +57,91 @@ export class AuthService {
     }
   }
 
-  login(data: any): Observable<any> {
+  pUserData(): Observable<UserData> {
     try {
-      return this.http.post<any>(this._loginUrl, data);
-    } catch (error) {
-      this.errorHandler.handleError(error);
-    }
-  }
-
-  userLogout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/auth/login']);
-  }
-
-  prepareUserData(): Observable<UserData> {
-    try {
-      return this.http.get<any>(this._userDataURL);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+      return this.http.get<UserData>(this._userDataURL);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
     }
   }
 
   messageContact(messageForm: any): Observable<void> {
     try {
-      return this.http.post<any>(this.contactUrl, messageForm);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+      return this.http.post<void>(this.contactUrl, messageForm);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
     }
   }
 
-  getCurrentUser() {
+  updateProfile(updateForm): Observable<Profile> {
     try {
-      return this.http.get<any>(this._userUrl);
+      return this.http.put<Profile>(
+        `${this._profileUrl}/userprofile/edit`,
+        updateForm
+      );
     } catch (error) {
-      this.errorHandler.handleError(error);
+      this.errorsHandler.handleError(error);
     }
   }
 
-  getSystemUsers(): Observable<User[]> {
+  getCurrentUser(): Observable<User> {
+    try {
+      return this.http.get<User>(`${this._userUrl}`);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
+    }
+  }
+
+  changeProfileImage(imageForm): Observable<Profile> {
+    try {
+      return this.http.patch<Profile>(this.imageChangeUrl, imageForm);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
+    }
+  }
+
+  addProfileImage(imageForm): Observable<Profile> {
+    try {
+      return this.http.post<Profile>(this.newImageUrl, imageForm);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
+    }
+  }
+
+  getUsers(): Observable<User[]> {
     try {
       return this.http.get<User[]>(this._usersURL);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
     }
   }
 
-  getToken() {
-    return localStorage.getItem('token');
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+  login(user: any): Observable<any> {
+    try {
+      return this.http.post<any>(this._loginUrl, user);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
+    }
   }
 
   getUserProfile(): Observable<Profile> {
     try {
-      return this.http.get<any>(this._profileUrl);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+      return this.http.get<Profile>(this._profileUrl);
+    } catch (err) {
+      this.errorsHandler.handleError(err);
     }
+  }
+
+  userLogout() {
+    this.router.navigate(["/auth/login"]);
+    return localStorage.removeItem("token");
+  }
+
+  isLoggedIn() {
+    return !!localStorage.getItem("token");
+  }
+
+  getToken() {
+    return localStorage.getItem("token");
   }
 }

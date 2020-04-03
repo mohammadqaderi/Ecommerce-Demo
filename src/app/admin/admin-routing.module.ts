@@ -6,6 +6,7 @@ import {ManageCategoriesComponent} from "./components/manage-categories/manage-c
 import {CategoryResolverService} from "../resolvers/category-resolver.service";
 import {UserResolverService} from "../resolvers/user-resolver.service";
 import {AdminAuthGuard} from "../guards/admin-auth.guard";
+import {ManageUsersComponent} from "./components/manage-users/manage-users.component";
 
 const routes: Routes = [
   {
@@ -30,7 +31,7 @@ const routes: Routes = [
           },
           {
             path: 'manage-users',
-            component: ManageCategoriesComponent,
+            component: ManageUsersComponent,
             resolve: {
               allUsers: UserResolverService
             },

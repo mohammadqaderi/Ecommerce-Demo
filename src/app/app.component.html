@@ -3,50 +3,80 @@
     <button mat-icon-button (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <a mat-button>GTS Website</a>
+    <a mat-button routerLink="/" style="font-family: 'Anton', sans-serif">GTS Website</a>
     <div class="col-md-7 justify-content-start">
-      <a mat-button>Home</a>
-      <a mat-button>Contact Us</a>
-      <a mat-button>Products</a>
+
+      <a mat-button style="font-family: 'Anton', sans-serif" routerLink="/contact"> Contact Us <i
+        class="fa fa-mail-forward"></i> </a>
+      <a mat-button style="font-family: 'Anton', sans-serif" routerLink="/products"> Products </a>
+
     </div>
+
     <div class="col-md-5 justify-content-end">
-      <a mat-button>Login</a>
-      <a mat-button>Register</a>
-      <a mat-button [matMenuTriggerFor]="managementMenu">Management</a>
+      <a *ngIf="!this.authService.isLoggedIn()"
+         style="font-family: 'Anton', sans-serif" mat-button routerLink="/auth/login" routerLinkActive="active">Login <i
+        class="fas fa-sign-in-alt"></i></a>
+      <a *ngIf="!this.authService.isLoggedIn()"
+         style="font-family: 'Anton', sans-serif" mat-button routerLink="/auth/register"
+         routerLinkActive="active">Register <i class="far fa-user-circle"></i>
+
+      </a>
+      <a *ngIf="this.authService.isLoggedIn() && (this.authService.currentUser && this.authService.currentUser.isAdmin)"
+         style="font-family: 'Anton', sans-serif" mat-button [matMenuTriggerFor]="managementMenu">
+        Management
+      </a>
       <mat-menu #managementMenu="matMenu">
-        <a mat-menu-item>Dashboard</a>
-        <a mat-menu-item>M-Categories</a>
-        <a mat-menu-item>M-Users</a>
+        <a mat-menu-item routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+        <a mat-menu-item routerLink="/admin/management/manage-categories" routerLinkActive="active">M-Categories</a>
+        <a mat-menu-item routerLink="/admin/management/manage-users" routerLinkActive="active">M-Users</a>
       </mat-menu>
-      <a mat-button [matMenuTriggerFor]="userMenu">User</a>
-      <a mat-button
-         style=" font-size: 23px">
-        <i style="font-size: 23px" class="fas fa-cart-plus" matBadge="5"
+
+      <a mat-button style="font-family: 'Anton', sans-serif"
+         [matMenuTriggerFor]="userMenu" *ngIf="this.authService.isLoggedIn()">
+        {{authService.username}}
+      </a>
+
+      <a mat-button routerLink="/cart" routerLinkActive="active"
+         style="font-family: 'Anton', sans-serif; font-size: 23px"
+         *ngIf="authService.isLoggedIn() && authService.cartItem">
+        <i style="font-size: 23px" class="fas fa-cart-plus" [matBadge]="authService.cartItem.total_products.toString()"
            matBadgeOverlap="false"
            matBadgePosition="above after" matBadgeSize="medium"
            matBadgeColor="warn"></i>
       </a>
       <mat-menu #userMenu="matMenu">
-        <a mat-menu-item>Profile</a>
-        <a mat-menu-item>Orders</a>
-        <a mat-menu-item>Logout</a>
+        <a mat-menu-item routerLink="/profile" routerLinkActive="active">Profile</a>
+        <a mat-menu-item routerLink="/orders" routerLinkActive="active">Orders</a>
+        <a mat-menu-item style="cursor: pointer;" (click)="authService.userLogout()">
+          <i class="fa fa-sign-out-alt"></i>
+          Logout
+        </a>
       </mat-menu>
+
     </div>
   </mat-toolbar-row>
 
+
 </mat-toolbar>
+
 <ng-container>
   <mat-sidenav-container class="example-container">
-    <mat-sidenav #sidenav mode="side" opened class="example-sidenav justify-content-center
-   text-center" [fixedInViewport]="false">
-
+    <mat-sidenav #sidenav mode="side" opened class="example-sidenav justify-content-center text-center"
+                 [fixedInViewport]="false"
+    >
+      <!-- child and parent component
+       that when child component is inside parent component -->
+      <app-category-list [inputCategories]="categories"></app-category-list>
     </mat-sidenav>
+
     <mat-sidenav-content>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
   <mat-toolbar class="example-footer">
     GTS Website
   </mat-toolbar>
 </ng-container>
+
 

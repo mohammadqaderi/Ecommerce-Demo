@@ -1,1 +1,19 @@
-<p>category-list works!</p>
+<div *ngIf="inputCategories" class="mt-3">
+  <h2 style="font-family: 'Anton', sans-serif" class="text-center">
+    Categories
+  </h2>
+  <mat-list *ngFor="let category of inputCategories" class="justify-content-center">
+    <mat-list-item class="align-self-center nav-item itemCss">{{category.name}}</mat-list-item>
+  </mat-list>
+</div>
+
+
+
+<div *ngIf="categories" class="mt-3">
+  <h2 style="font-family: 'Anton', sans-serif" class="text-center">
+    Categories
+  </h2>
+  <mat-list *ngFor="let category of categories" class="justify-content-center">
+    <mat-list-item class="align-self-center nav-item itemCss">{{category.name}}</mat-list-item>
+  </mat-list>
+</div>

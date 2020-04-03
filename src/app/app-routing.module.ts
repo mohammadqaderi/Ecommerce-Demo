@@ -19,6 +19,7 @@ import {UserAuthGuard} from "./guards/user-auth.guard";
 import {AdminAuthGuard} from "./guards/admin-auth.guard";
 import {ApplicationErrorComponent} from "./shared/application-error/application-error.component";
 import {ResourceNotFoundComponent} from "./shared/resource-not-found/resource-not-found.component";
+import {ContactComponent} from "./components/contact/contact.component";
 
 
 const routes: Routes = [
@@ -42,9 +43,6 @@ const routes: Routes = [
   {
     path: 'cart',
     component: CartComponent,
-    resolve: {
-      cart: CartResolverService
-    },
     canActivate: [UserAuthGuard]
   },
   {
@@ -61,6 +59,10 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'contact',
+    component: ContactComponent
+  },
+  {
     path: 'products',
     component: ProductListComponent,
     resolve: {
@@ -75,7 +77,7 @@ const routes: Routes = [
     path: 'categories',
     component: CategoryListComponent,
     resolve: {
-      categories: CategoryResolverService
+      categories: CategoryResolverService // only if the route is: localhost:4200/categories
     }
   },
   {

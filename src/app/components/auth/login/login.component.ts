@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit {
     private alertService: AlertService,
     private modalService: BsModalService,
   ) {
-
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/home']);
+    }
   }
 
   userLogin() {
