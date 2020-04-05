@@ -12,7 +12,8 @@ export class AppComponent implements OnInit {
   title = 'e-commerce';
   categories: Category[]; // will be sent to child component
 
-  constructor(public authService: AuthService, private categoryService: CategoryService) {
+  constructor(public authService: AuthService,
+              private categoryService: CategoryService) {
     authService.prepareUserData();
     this.prepareCategories();
   }

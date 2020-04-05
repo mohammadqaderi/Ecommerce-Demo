@@ -19,7 +19,8 @@ export class CartService {
 
   getCart(id: number): Observable<Cart> {
     try {
-      return this.http.get<Cart>(this._cartUrl);
+      const urlById = `${this._cartUrl}/${id}`;
+      return this.http.get<Cart>(urlById);
     } catch (error) {
       this.errorHandler.handleError(error);
     }
@@ -27,7 +28,8 @@ export class CartService {
 
   getCartItem(id: number): Observable<CartItem> {
     try {
-      return this.http.get<CartItem>(this._cartItemUrl);
+      const urlById = `${this._cartItemUrl}/${id}`;
+      return this.http.get<CartItem>(urlById);
     } catch (error) {
       this.errorHandler.handleError(error);
     }
@@ -52,7 +54,7 @@ export class CartService {
     }
   }
 
-  removeFromProduct(cartItemId: number, productId: number): Observable<CartItem> {
+  removeFromCart(cartItemId: number, productId: number): Observable<CartItem> {
     try {
       const removeUrl = `${this._cartItemUrl}/${cartItemId}/products/${productId}/remove-from-cart`;
       return this.http.delete<CartItem>(removeUrl);

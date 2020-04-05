@@ -1,1 +1,29 @@
-<p>product-details works!</p>
+<div class="container-fluid " style="margin: 8px">
+  <div class="row">
+    <div class="col-md-6" *ngIf="product && product.image">
+      <img [src]="product.image" alt="" class="figure-img">
+    </div>
+    <div class="col-md-6" *ngIf="product">
+      <p class="lead">
+        Name: {{product.name}}
+      </p>
+      <p class="lead">
+        Description: {{product.description}}
+      </p>
+      <p class="lead">
+        Price: ${{product.price}}
+      </p>
+      <p class="lead">
+        Published In: {{product.publishedIn | date: 'short'}}
+      </p>
+      <div class="d-flex">
+        <div class="col-md-6">
+          <button class="btn btn-outline-primary">Add to cart</button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-outline-primary" routerLink="/categories">Back to categories</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

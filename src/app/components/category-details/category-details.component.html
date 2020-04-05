@@ -1,1 +1,30 @@
-<p>category-details works!</p>
+<div class="container m-3" *ngIf="category">
+  <div>
+    <h2 style="font-family: 'Anton', sans-serif;" class="text-center">
+      {{category.name}}
+    </h2>
+    <mat-divider class="m-2"></mat-divider>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let product of category.products">
+        <div class="card mb-3">
+          <img [src]="product.image" *ngIf="product.image" alt="">
+          <div class="card-body">
+            <h5 class="card-title">{{product.name}}</h5>
+            <mat-divider class="m-2"></mat-divider>
+            <p class="card-text lead">${{product.price}}</p>
+          </div>
+          <div class="card-footer">
+            <div class="row justify-content-center">
+              <button (click)="viewProductDetails(product)" class="btn btn-outline-info">
+                View details
+              </button>
+              <button class="btn btn-outline-primary">
+                Add to cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

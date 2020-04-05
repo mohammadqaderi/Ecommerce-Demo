@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {ErrorHandler} from "../../shared/error-handler";
 import {Observable} from "rxjs";
 import {Product} from "../../models/product";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class ProductService {
   private url = `http://localhost:3000/products`;
   private errorHandler: ErrorHandler = new ErrorHandler();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   getProducts(): Observable<Product[]> {
@@ -55,4 +56,11 @@ export class ProductService {
     }
   }
 
+  viewProductDetails(product: Product) {
+    this.router.navigate(['/products', product.id], {
+      queryParams: {
+        Name: product.name
+      }
+    })
+  }
 }

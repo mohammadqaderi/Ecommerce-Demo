@@ -28,6 +28,11 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  {
     path: 'profile',
     component: ProfileComponent,
     resolve: {
@@ -39,11 +44,15 @@ const routes: Routes = [
     path: 'orders',
     component: OrderComponent,
     canActivate: [UserAuthGuard]
+
   },
   {
     path: 'cart',
     component: CartComponent,
-    canActivate: [UserAuthGuard]
+    resolve: {
+      userCart: CartResolverService
+    },
+    canActivate: [UserAuthGuard],
   },
   {
     path: 'auth',
@@ -70,7 +79,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'products/:id',
+    path: 'products/:productId',
     component: ProductDetailsComponent
   },
   {
@@ -84,13 +93,8 @@ const routes: Routes = [
     path: 'categories/:id',
     component: CategoryDetailsComponent
   },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
-  {path: "notFoundResource", component: ResourceNotFoundComponent},
-  {path: "applicationError", component: ApplicationErrorComponent},
+  {path: "notFoundResource/:status", component: ResourceNotFoundComponent},
+  {path: "applicationError/:status", component: ApplicationErrorComponent},
   {
     path: 'admin', // this is the prefix route
     canActivate: [AdminAuthGuard],
@@ -104,7 +108,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
+  imports: [RouterModule.forRoot(routes, {
+    preloadingStrategy: PreloadAllModules
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
