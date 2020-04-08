@@ -1,5 +1,5 @@
 import {User} from "./user";
-import {PaymentMethods} from "../enums/payment-methods.enum";
+import {PaymentMethod} from "../enums/payment-methods.enum";
 import {Invoice} from "./invoice";
 
 export class Payment {
