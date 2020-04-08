@@ -1,7 +1,6 @@
 import {OrderStatus} from "../enums/order-status.enum";
 import {User} from "./user";
 import {OrderItem} from "./order-item";
-import {Invoice} from "./invoice";
 
 export class Order {
   id: number;

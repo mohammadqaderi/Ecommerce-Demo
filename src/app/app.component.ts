@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   constructor(public authService: AuthService,
               private categoryService: CategoryService) {
     authService.prepareUserData();
+    authService.refreshInfo();
     this.prepareCategories();
   }
 
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.prepareUserData();
+    this.authService.refreshInfo();
     this.prepareCategories();
   }
 

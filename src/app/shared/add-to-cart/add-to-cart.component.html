@@ -1,0 +1,28 @@
+<button (click)="openDialog(addToCartDialog)" class="btn btn-outline-primary ml-2"
+>
+  Add to cart
+</button>
+<ng-template #addToCartDialog>
+  <h2 mat-dialog-title>
+    Type here how many quantity you want to add into your cart
+  </h2>
+  <mat-dialog-content class="mat-typography" style="width: 400px; height: auto;">
+    <div class="row justify-content-center mt-2">
+      <mat-form-field class="mt-3" appearance="fill">
+        <mat-label>Quantity</mat-label>
+        <input type="number" name="cartQuantity" matInput [(ngModel)]="inputProduct.cartQuantity"
+               required placeholder="EX. 10" min="1" max="100">
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" class="btn btn-outline-success pull-right"
+            (click)="productService.pushToCart(inputProduct.id, inputProduct.cartQuantity);
+         hideDialog(); openSnackBar('product was added successfully into your cart', 'OK')">Add to cart
+    </button>
+    <button type="button" style="width: 120px;" (click)="hideDialog();"
+            class="btn btn-outline-dark pull-right">
+      Close
+    </button>
+  </mat-dialog-actions>
+</ng-template>

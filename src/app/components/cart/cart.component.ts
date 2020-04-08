@@ -12,6 +12,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Product} from "../../models/product";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {ProductService} from "../../services/product/product.service";
 
 @Component({
   selector: 'app-cart',
@@ -32,7 +33,8 @@ export class CartComponent implements OnInit {
     'Quantity',
     'Actions'
   ];
-  checkoutDto: FormGroup;
+  createPaymentDto: FormGroup;
+  createOrderDto: FormGroup;
   selectedPM = "";
   paymentMethods: string[] = [
     'VISA',
@@ -48,72 +50,52 @@ export class CartComponent implements OnInit {
               private fb: FormBuilder,
               private modalService: BsModalService,
               private snackBar: MatSnackBar,
+              private productService: ProductService,
               private dialog: MatDialog) {
     this.prepareCartData();
 
   }
 
   get paymentMethod() {
-    return this.checkoutDto.get('createPaymentDto').get('payment_method');
+    return this.createPaymentDto.get('payment_method');
   }
 
   get comments() {
-    return this.checkoutDto.get('createOrderDto').get('comments');
+    return this.createOrderDto.get('comments');
   }
 
   ngOnInit(): void {
     this.prepareCartData();
-    this.checkoutDto = this.fb.group({
-      createPaymentDto: this.fb.group({
-        payment_method: new FormControl(null, Validators.required)
-      }),
-      createOrderDto: this.fb.group({
-        comments: new FormControl(null, Validators.required)
-      })
-    });
+    this.createPaymentDto = this.fb.group({
+      payment_method: new FormControl(null, Validators.required)
+    })
+    this.createOrderDto = this.fb.group({
+      comments: new FormControl(null, Validators.required)
+    })
   }
 
   prepareCartData() {
-    if (this.authService.isLoggedIn()) {
-      if (this.route.snapshot.data.userCart) {
-        console.log(true);
-        this.cart = this.route.snapshot.data.userCart;
-        this.cartService.getCartItem(this.route.snapshot.data.userCart.cartItemId)
-          .subscribe(res => {
-            this.cartItem = res;
-            this.dataSource = new MatTableDataSource<any>(res.products);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-          });
-      } else if (this.authService.cart && this.authService.cartItem) {
-        this.cart = this.authService.cart;
-        this.cartItem = this.authService.cartItem;
-        this.dataSource = new MatTableDataSource<any>(this.cartItem.products);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      }else{
-        console.log(false);
-
-      }
+    if (this.authService.cart && this.authService.cartItem) {
+      this.cart = this.authService.cart;
+      this.cartItem = this.authService.cartItem;
+      this.dataSource = new MatTableDataSource<any>(this.cartItem.products);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    } else {
+      console.log(false);
     }
   }
 
   refreshCartData() {
-    if (this.authService.cartItem) {
-      console.log(true);
-      this.cartService.getCartItem(this.authService.cartItem.id)
-        .subscribe(res => {
-          this.cartItem = res;
-          this.authService.cartItem = res;
-          this.dataSource = new MatTableDataSource<any>(res.products);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.openSnackBar('Cart Refreshed Successfully', 'OK');
-        });
-    } else {
-      console.log(false);
-    }
-
+    this.cartService.getCartItem(this.authService.cartItem.id)
+      .subscribe(res => {
+        this.cartItem = res;
+        this.authService.cartItem = res;
+        this.dataSource = new MatTableDataSource<any>(res.products);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.openSnackBar('Cart Refreshed Successfully', 'OK');
+      });
   }
 
   clearCartProducts() {
@@ -143,17 +125,12 @@ export class CartComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 2000
-    })
+    });
   }
 
   checkSelectedMethod() {
-    if (this.selectedPM === 'PAYPAL' || this.selectedPM === 'VISA'
-      || this.selectedPM === 'MASTERCARD' || this.selectedPM === 'CASH_ON_DELIVERY'
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.selectedPM === 'PAYPAL' || this.selectedPM === 'VISA'
+      || this.selectedPM === 'MASTERCARD' || this.selectedPM === 'CASH_ON_DELIVERY';
   }
 
   removeFromCart(productId: number) {
@@ -167,7 +144,11 @@ export class CartComponent implements OnInit {
   }
 
   completeCheckout() {
-    this.cartService.checkout(this.cartItem.id, this.checkoutDto.value)
+    const checkoutData = {
+      createPaymentDto: this.createPaymentDto.value,
+      createOrderDto: this.createOrderDto.value
+    };
+    this.cartService.checkout(this.cartItem.id, checkoutData)
       .subscribe(res => {
           this.openSnackBar('order created successfully', 'OK');
           this.router.navigate(['/orders'], {
@@ -180,6 +161,14 @@ export class CartComponent implements OnInit {
           this.openSnackBar(`An error has occurred ${error.message}`, 'OK');
         });
 
+  }
+
+  updateProductCartQuantity(product: Product) {
+    this.productService.updateProductCartQuantity(product.id, product.cartQuantity)
+      .subscribe(res => {
+        this.openSnackBar(`Quantity of this products was updated successfully!`, 'OK');
+
+      });
   }
 }
 

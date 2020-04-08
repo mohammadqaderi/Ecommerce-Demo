@@ -1,1 +1,35 @@
-<p>dashboard works!</p>
+<div class="container-fluid m-2">
+  <div class="row justify-content-center m-2">
+    <h1 style="font-family: 'Anton', sans-serif" class="mat-display-2 text-center">General Information</h1>
+  </div>
+  <mat-toolbar color="primary" class="mt-2 mb-2">
+    <mat-toolbar-row>
+      <span>Total Users</span>
+      <span class="example-spacer"></span>
+      <p class="example-icon lead">{{availableData.totalUsers}}
+      </p>
+
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <span>Total Orders</span>
+      <span class="example-spacer"></span>
+      <p class="example-icon lead">{{availableData.totalOrders}}
+      </p>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row>
+      <span>Total Payments</span>
+      <span class="example-spacer"></span>
+      <p class="example-icon lead">{{availableData.totalPayments}}
+      </p>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row>
+      <span>Total Invoices</span>
+      <span class="example-spacer"></span>
+      <p class="example-icon lead">{{availableData.totalInvoices}}
+      </p>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+</div>

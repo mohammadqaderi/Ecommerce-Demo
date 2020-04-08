@@ -44,15 +44,23 @@ export class AuthService {
 
   prepareUserData() {
     if (this.isLoggedIn()) {
+      this.getCurrentUser().subscribe(resUser => {
+        this.currentUser = resUser;
+      });
       this.pUserData().subscribe(uData => {
         this.profile = uData.profile;
         this.username = `${uData.profile.firstname}
         ${uData.profile.lastname}`;
+      });
+    }
+  }
+
+  refreshInfo() {
+    if (this.isLoggedIn()) {
+      this.pUserData().subscribe(uData => {
+        this.profile = uData.profile;
         this.cart = uData.cart;
         this.cartItem = uData.cartItem;
-      });
-      this.getCurrentUser().subscribe(resUser => {
-        this.currentUser = resUser;
       });
     }
   }

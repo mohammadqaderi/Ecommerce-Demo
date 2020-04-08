@@ -1,1 +1,64 @@
-<p>manage-users works!</p>
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <h2 style="font-family: 'Anton', sans-serif" class="text-center">
+      Admins Of The System
+    </h2>
+  </div>
+  <table *ngIf="admins" class="table table-striped table-primary">
+    <thead>
+    <tr>
+      <th scope="col">Number</th>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let admin of admins; let i =index">
+      <td scope="row">{{i + 1}}</td>
+      <td>
+        <p class="lead">{{admin.id}}</p>
+      </td>
+      <td>
+        <p class="lead">{{admin.username}}</p>
+      </td>
+      <td>
+        <p class="lead">Admin</p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <mat-divider class="m-2"></mat-divider>
+
+  <div class="row justify-content-center">
+    <h2 style="font-family: 'Anton', sans-serif" class="text-center">
+      Users Of The System
+    </h2>
+  </div>
+
+  <table *ngIf="users" class="table table-striped table-primary">
+    <thead>
+    <tr>
+      <th scope="col">Number</th>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users; let i =index">
+      <td scope="row">{{i + 1}}</td>
+      <td>
+        <p class="lead">{{user.id}}</p>
+      </td>
+      <td>
+        <p class="lead">{{user.username}}</p>
+      </td>
+      <td>
+        <p class="lead">User</p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

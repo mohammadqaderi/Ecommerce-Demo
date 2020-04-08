@@ -4,6 +4,7 @@ import {ErrorHandler} from "../../shared/error-handler";
 import {Observable} from "rxjs";
 import {Product} from "../../models/product";
 import {Router} from "@angular/router";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class ProductService {
   private url = `http://localhost:3000/products`;
   private errorHandler: ErrorHandler = new ErrorHandler();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private authService: AuthService,
+              private router: Router) {
   }
 
   getProducts(): Observable<Product[]> {
@@ -62,5 +64,19 @@ export class ProductService {
         Name: product.name
       }
     })
+  }
+
+  pushToCart(productId: number, quantity: number) {
+    if (this.authService.cartItem) {
+      this.insertToCart(productId, this.authService.cartItem.id, quantity)
+        .subscribe(res => {
+          this.router.navigate(['/cart'],
+            {
+              queryParams: {
+                Updated: true
+              }
+            })
+        })
+    }
   }
 }

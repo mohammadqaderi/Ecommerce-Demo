@@ -34,6 +34,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {TokenInterceptorService} from "./services/auth/token-interceptor.service";
 import {ErrorInterceptorService} from "./services/auth/error-interceptor.service";
 import { ProfileComponent } from './components/profile/profile.component';
+import { AddToCartComponent } from './shared/add-to-cart/add-to-cart.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     ApplicationErrorComponent,
     PageNotFoundComponent,
     ResourceNotFoundComponent,
-    ProfileComponent
+    ProfileComponent,
+    AddToCartComponent
   ],
   imports: [
     BrowserModule,

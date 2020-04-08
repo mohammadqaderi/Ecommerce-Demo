@@ -18,9 +18,9 @@
               <button (click)="viewProductDetails(product)" class="btn btn-outline-info">
                 View details
               </button>
-              <button class="btn btn-outline-primary">
-                Add to cart
-              </button>
+              <app-add-to-cart [inputProduct]="product"
+                               *ngIf="authService.isLoggedIn() && !product.addedToCart"></app-add-to-cart>
+
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {BsModalRef, BsModalService} from "ngx-bootstrap";
 
 @Component({
   selector: 'app-resource-not-found',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResourceNotFoundComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild('notFoundTemplate', {static: true}) notFoundTemplate: TemplateRef<any>;
+
+  constructor(private modalService: BsModalService) {
+  }
+
+  modalRef: BsModalRef;
 
   ngOnInit(): void {
+    this.modalRef = this.modalService.show(this.notFoundTemplate);
+  }
+
+  hide() {
+    this.modalRef.hide();
   }
 
 }

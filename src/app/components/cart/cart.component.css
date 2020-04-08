@@ -31,3 +31,10 @@ mat-table {
     padding: 8px 24px;
   }
 }
+.mat-stepper-vertical {
+  margin-top: 8px;
+}
+
+.mat-form-field {
+  margin-top: 16px;
+}

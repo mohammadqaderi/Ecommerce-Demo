@@ -36,26 +36,29 @@ export class CategoryService {
   createCategory(createCategoryDto: any): Observable<Category> {
     try {
       return this.http.post<Category>(this.categoryUrl, createCategoryDto);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+    } catch (err) {
+      this.errorHandler.handleError(err);
     }
   }
 
-  updateCategory(categoryId: number, updateCategoryDto: any): Observable<void> {
+  updateCategory(categoryId: number, updateCategoryDto): Observable<void> {
     try {
-      const urlOfCategory = `${this.categoryUrl}/${categoryId}`;
-      return this.http.put<void>(urlOfCategory, updateCategoryDto);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+      const urlById = `${this.categoryUrl}/${categoryId}`;
+      return this.http.put<void>(urlById, updateCategoryDto);
+    } catch (err) {
+      this.errorHandler.handleError(err);
     }
   }
-
-  updateProduct(categoryId: number, productId: number, updateProductDto: any): Observable<void> {
+  updateProduct(
+    categoryId: number,
+    productId: number,
+    updateProductDto: any
+  ): Observable<void> {
     try {
-      const urlOfProductOfCategory = `${this.categoryUrl}/${categoryId}/products/${productId}`;
-      return this.http.put<void>(urlOfProductOfCategory, updateProductDto);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+      const urlById = `${this.categoryUrl}/${categoryId}/products/${productId}`;
+      return this.http.put<void>(urlById, updateProductDto);
+    } catch (err) {
+      this.errorHandler.handleError(err);
     }
   }
 
@@ -76,21 +79,21 @@ export class CategoryService {
     }
   }
 
-  deleteProduct(categoryId: number, productId: number): Observable<void> {
+  deleteProduct(categoryId: number, productId: number) {
     try {
-      const urlOfProductOfCategory = `${this.categoryUrl}/${categoryId}/products/${productId}`;
-      return this.http.delete<void>(urlOfProductOfCategory);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+      const urlById = `${this.categoryUrl}/${categoryId}/products/${productId}`;
+      return this.http.delete<void>(urlById);
+    } catch (err) {
+      this.errorHandler.handleError(err);
     }
   }
 
   addProduct(categoryId: number, createProductDto: any): Observable<void> {
     try {
-      const urlOfCategory = `${this.categoryUrl}/products`;
-      return this.http.put<void>(urlOfCategory, createProductDto);
-    } catch (error) {
-      this.errorHandler.handleError(error);
+      const urlById = `${this.categoryUrl}/${categoryId}/products`;
+      return this.http.post<void>(urlById, createProductDto);
+    } catch (err) {
+      this.errorHandler.handleError(err);
     }
   }
 }

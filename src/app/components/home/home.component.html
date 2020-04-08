@@ -1,1 +1,59 @@
-<h3>Welcome to home</h3>
+<div class="container m-2 p-2">
+  <div class="row justify-content-center mb-2">
+    <h3 style="font-family: 'Anton', sans-serif" class="text-center">
+      Latest Products
+    </h3>
+  </div>
+  <mat-divider class="m-2"></mat-divider>
+  <div class="row mt-3" *ngIf="products && products.length >=1">
+    <div class="col-md-4" *ngFor="let product of sortProductsByDate()">
+      <div class="card mb-3">
+        <img [src]="product.image" *ngIf="product.image" alt="">
+        <div class="card-body">
+          <h5 class="card-title">{{product.name}}</h5>
+          <mat-divider class="m-2"></mat-divider>
+          <p class="card-text lead">${{product.price}}</p>
+        </div>
+        <div class="card-footer">
+          <div class="row justify-content-center">
+            <button (click)="productService.viewProductDetails(product)" class="btn btn-outline-info">
+              View details
+            </button>
+            <app-add-to-cart [inputProduct]="product"
+                             *ngIf="authService.isLoggedIn() && !product.addedToCart"></app-add-to-cart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container m-2 p-2">
+  <div class="row justify-content-center mb-2">
+    <h3 style="font-family: 'Anton', sans-serif" class="text-center">
+      Top Rated
+    </h3>
+  </div>
+  <mat-divider class="m-2"></mat-divider>
+  <div class="row mt-3" *ngIf="products && products.length >=1">
+    <div class="col-md-4" *ngFor="let product of products">
+      <div class="card mb-3">
+        <img [src]="product.image" *ngIf="product.image" alt="">
+        <div class="card-body">
+          <h5 class="card-title">{{product.name}}</h5>
+          <mat-divider class="m-2"></mat-divider>
+          <p class="card-text lead">${{product.price}}</p>
+        </div>
+        <div class="card-footer">
+          <div class="row justify-content-center">
+            <button (click)="productService.viewProductDetails(product)" class="btn btn-outline-info">
+              View details
+            </button>
+            <app-add-to-cart [inputProduct]="product"
+                             *ngIf="authService.isLoggedIn() && !product.addedToCart"></app-add-to-cart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

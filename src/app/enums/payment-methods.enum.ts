@@ -1,2 +1,7 @@
-export enum PaymentMethods {
+export enum PaymentMethod {
+  VISA = 'VISA',
+  PAYPAL = 'PAYPAL',
+  CASH_ON_DELIVERY = 'CASH_ON_DELIVERY',
+  MASTERCARD = "MASTERCARD",
+  PURCHASE_ORDER = "PURCHASE_ORDER"
 }

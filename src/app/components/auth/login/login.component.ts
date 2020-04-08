@@ -36,11 +36,6 @@ export class LoginComponent implements OnInit {
       res => {
         localStorage.setItem("token", res.accessToken);
         this.authService.prepareUserData();
-        this.authService.getCurrentUser().subscribe(
-          resUser => {
-            this.authService.currentUser = resUser;
-          }
-        );
         this.router.navigate([`/home`]);
       },
       error => {

@@ -4,6 +4,7 @@ import {CategoryService} from "../../services/category/category.service";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Product} from "../../models/product";
 import {ProductService} from "../../services/product/product.service";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-category-details',
@@ -16,6 +17,7 @@ export class CategoryDetailsComponent implements OnInit {
   constructor(private categoryService: CategoryService,
               private route: ActivatedRoute,
               private router: Router,
+              public authService: AuthService,
               private productService: ProductService) {
     route.paramMap.subscribe((params: ParamMap) => {
       if (params.get('id')) {

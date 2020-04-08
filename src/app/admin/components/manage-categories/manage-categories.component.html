@@ -1,1 +1,265 @@
-<p>manage-categories works!</p>
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <button class="btn btn-primary pull-right" (click)="openDialog(addTemplate)">Add Category</button>
+    </div>
+    <mat-divider class="m-auto"></mat-divider>
+    <div class="card-body">
+      <div *ngFor="let category of categories; let i= index">
+        <div class="d-flex flex-column bd-highlight mb-3 justify-content-start">
+          <div class="p-2 bd-highlight">Name: {{category.name}}</div>
+          <div class="p-2 bd-highlight">Description: {{category.description}}</div>
+          <div class="p-2 bd-highlight">
+            <button class="btn btn-outline-primary pull-left mr-1"
+                    (click)="viewCategoryProducts(category); openDialog(categoryDetails)">View Products
+            </button>
+            <button class="btn btn-outline-success pull-left" (click)="openDialog(editCategory)">Update
+            </button>
+            <button class="btn btn-outline-danger pull-left" (click)="openDialog(deleteCategoryTemplate)">Delete
+            </button>
+          </div>
+        </div>
+        <mat-divider class="m-auto"></mat-divider>
+        <ng-template #editCategory>
+          <h2 mat-dialog-title *ngIf="category">
+            Updating {{category.name}}
+          </h2>
+          <mat-dialog-content class="mat-typography" style="width: 700px; height: auto">
+
+            <form [formGroup]="updateCategoryDto" (ngSubmit)="updateCategory(category.id); hide()">
+              <mat-form-field class="example-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Name of the category" [value]="category.name" type="text"
+                       formControlName="name" name="name">
+              </mat-form-field>
+
+              <mat-form-field class="example-full-width">
+                <mat-label>Description</mat-label>
+                <input matInput placeholder="Description of the product" type="text" [value]="category.description"
+                       formControlName="description" name="description">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Category Type</mat-label>
+                <input matInput placeholder="Type of the product" [value]="category.type" type="text"
+                       formControlName="type" name="type">
+              </mat-form-field>
+              <button style="width: 120px;" class="btn btn-outline-success pull-right" type="submit">Update
+              </button>
+            </form>
+
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button style="width: 120px;" (click)="hide()" class="btn btn-outline-warning pull-right"
+                    type="button">Close
+            </button>
+          </mat-dialog-actions>
+        </ng-template>
+        <ng-template #deleteCategoryTemplate>
+          <h2 mat-dialog-title>Deleting {{category.name}}</h2>
+          <mat-dialog-content class="mat-typography">
+            <p class="alert alert-danger">Are you sure that you want to delete this category?</p>
+
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button class="btn btn-outline-danger pull-right ml-1 mr-1" (click)="deleteCategory(category.id); hide()">
+              Yes
+            </button>
+            <button style="width: 120px;" (click)="hide()" class="btn btn-outline-warning pull-right"
+                    type="button">Close
+            </button>
+          </mat-dialog-actions>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #addTemplate>
+  <h2 mat-dialog-title>Adding a New Category</h2>
+  <mat-dialog-content class="mat-typography" style="width: 700px; height: auto">
+    <form [formGroup]="createCategoryDto" (ngSubmit)="addCategory(); hide()">
+      <mat-form-field class="example-full-width">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name of the category" type="text" formControlName="name" name="name" required>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Description</mat-label>
+        <input matInput placeholder="Description of the category" type="text" formControlName="description"
+               name="description" required>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Category Type</mat-label>
+        <mat-select [(value)]="selectedCategory" name="type" formControlName="type" required>
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let type of categoryTypes" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="cType.hasError('required')">Please choose a type</mat-error>
+      </mat-form-field>
+
+      <mat-hint>{{cType.value?.sound}}</mat-hint>
+      <button style="width: 120px;" class="btn btn-outline-success pull-right" type="submit"
+              [disabled]="!createCategoryDto.valid">Add
+      </button>
+    </form>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #categoryDetails>
+  <mat-dialog-content class="mat-typography" style="width: 700px; height: auto">
+    <div class="mt-2">
+      <h2 mat-dialog-title *ngIf="category">
+        <p class="lead">{{category.name}} Products
+          <button type="button" class="btn pull-right btn-outline-primary btn-round"
+                  (click)="openDialog(pushingProduct)">
+            Add Product
+          </button>
+        </p>
+      </h2>
+    </div>
+    <mat-divider class="m-auto"></mat-divider>
+    <div *ngIf="category">
+      <div class="row">
+        <div class="col-md-auto" *ngFor="let prod of category.products">
+          <div class="card border-secondary mb-3" style="max-width: 18rem;">
+            <img *ngIf="prod.image" [src]="prod.image" class="card-img-top" alt="product image">
+            <div class="card-header">ID: {{prod.id}}</div>
+            <div class="card-body text-secondary">
+              <h5 class="card-title">Name: {{prod.name}}</h5>
+              <p class="card-text">Description: {{prod.description}}</p>
+              <p class="card-text">Price: {{prod.price}}</p>
+              <p class="card-text">Quantity: {{prod.quantity}}</p>
+              <div class="card-footer">
+                <div class="btn-group">
+                  <button class="btn btn-outline-success ml-2"
+                          (click)="prepareProductForm(prod); openDialog(updatingProduct)" style="width: 100px;">Edit
+                  </button>
+                  <button class="btn btn-outline-danger" style="width: 100px;"
+                          (click)="openDialog(deleteProductTemplate)">Delete
+                  </button>
+                </div>
+              </div>
+              <ng-template #updatingProduct>
+                <h2 mat-dialog-title *ngIf="prod">
+                  Updating Product {{prod.name}}
+                </h2>
+                <mat-dialog-content class="mat-typography" style="width: 700px; height: auto" *ngIf="prod">
+
+                  <form [formGroup]="updateProductDto" (ngSubmit)="updateProduct(category.id, prod.id, prod); hide()">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Name</mat-label>
+                      <input matInput placeholder="Name of the product" type="text" formControlName="name" name="name">
+                    </mat-form-field>
+
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Description</mat-label>
+                      <input matInput placeholder="Description of the product" type="text" formControlName="description"
+                             name="description">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Price</mat-label>
+                      <input matInput placeholder="Price of the product" type="number" formControlName="price"
+                             name="price">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Quantity</mat-label>
+                      <input matInput placeholder="Quantity of the product" type="number" formControlName="quantity"
+                             name="quantity">
+                    </mat-form-field>
+                    <div class="form-group">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="updateImage" formControlName="image"
+                               name="image"
+                               ng2FileSelect [uploader]="uploader" (change)="onChangingFileSelect($event)">
+                        <label class="custom-file-label" for="updateImage">You have
+                          chosen: {{updateSelectedFile}}</label>
+                      </div>
+                    </div>
+
+                    <button style="width: 120px;" class="btn btn-outline-success pull-right" type="submit">Update
+                    </button>
+                  </form>
+
+                </mat-dialog-content>
+                <mat-dialog-actions align="end">
+                  <button style="width: 120px;" (click)="hide()" class="btn btn-outline-warning pull-right"
+                          type="button">Close
+                  </button>
+                </mat-dialog-actions>
+              </ng-template>
+              <ng-template #deleteProductTemplate>
+                <h2 mat-dialog-title>Deleting {{prod.name}}</h2>
+                <mat-dialog-content class="mat-typography">
+                  <p class="alert alert-danger">Are you sure that you want to delete this product?</p>
+
+                </mat-dialog-content>
+                <mat-dialog-actions align="end">
+                  <button class="btn btn-outline-danger pull-right ml-1 mr-1"
+                          (click)="deleteProduct(category.id, prod.id); hide()">
+                    Yes
+                  </button>
+                  <button style="width: 120px;" (click)="hide()" class="btn btn-outline-warning pull-right"
+                          type="button">Close
+                  </button>
+                </mat-dialog-actions>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+</ng-template>
+
+
+<ng-template #pushingProduct>
+  <h2 mat-dialog-title *ngIf="category">
+    Adding new product to {{category.name}}
+  </h2>
+  <mat-dialog-content class="mat-typography" style="width: 700px; height: auto" *ngIf="category">
+
+    <form [formGroup]="createProductDto" (ngSubmit)="addProduct(); hide()">
+      <mat-form-field class="example-full-width">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name of the product" type="text" formControlName="name" name="name" required>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Description</mat-label>
+        <input matInput placeholder="Description of the product" type="text" formControlName="description"
+               name="description" required>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Price</mat-label>
+        <input matInput placeholder="Price of the product" type="number" formControlName="price" name="price" required>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Quantity</mat-label>
+        <input matInput placeholder="Quantity of the product" type="number" formControlName="quantity" name="quantity"
+               required>
+      </mat-form-field>
+      <div class="form-group">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="image" formControlName="image" name="image" ng2FileSelect
+                 [uploader]="uploader" (change)="onUploadingFileSelect($event)" required>
+          <label class="custom-file-label" for="image">You have chosen: {{selectedFile}}</label>
+        </div>
+      </div>
+
+      <button style="width: 120px;" class="btn btn-outline-success pull-right" type="submit"
+              [disabled]="!createProductDto.valid">Add
+      </button>
+    </form>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button style="width: 120px;" (click)="hide()" class="btn btn-outline-warning pull-right" type="button">Close
+    </button>
+  </mat-dialog-actions>
+</ng-template>

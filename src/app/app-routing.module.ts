@@ -98,11 +98,11 @@ const routes: Routes = [
   {
     path: 'admin', // this is the prefix route
     canActivate: [AdminAuthGuard],
-    //lazy loading: this module will not loaded only if the the user navigate into it
+    // lazy loading: this module will not loaded only if the the user navigate into it
     loadChildren: () => import('./admin/admin.module').then(a => a.AdminModule)
   },
   {
-    path: '**',
+    path: '**', // unknown path
     component: PageNotFoundComponent
   }
 ];

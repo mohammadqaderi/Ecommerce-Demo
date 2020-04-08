@@ -4,26 +4,37 @@
       <img [src]="product.image" alt="" class="figure-img">
     </div>
     <div class="col-md-6" *ngIf="product">
-      <p class="lead">
+      <p class="lead" style=" font-family: 'Anton', sans-serif; font-size: 20px;">
         Name: {{product.name}}
       </p>
-      <p class="lead">
+      <p class="lead" style=" font-family: 'Anton', sans-serif; font-size: 20px;">
         Description: {{product.description}}
       </p>
-      <p class="lead">
+      <p class="lead" style=" font-family: 'Anton', sans-serif; font-size: 18px;">
         Price: ${{product.price}}
       </p>
-      <p class="lead">
+      <p class="lead" style=" font-family: 'Anton', sans-serif; font-size: 18px;">
         Published In: {{product.publishedIn | date: 'short'}}
       </p>
-      <div class="d-flex">
-        <div class="col-md-6">
-          <button class="btn btn-outline-primary">Add to cart</button>
-        </div>
-        <div class="col-md-6">
-          <button class="btn btn-outline-primary" routerLink="/categories">Back to categories</button>
-        </div>
-      </div>
+      <p class="lead" *ngIf="authService.isLoggedIn() && !product.addedToCart">
+        <app-add-to-cart [inputProduct]="product"
+                         *ngIf="authService.isLoggedIn() && !product.addedToCart"></app-add-to-cart>
+      </p>
+      <p class="lead text-warning" *ngIf="authService.isLoggedIn() && product.addedToCart">
+        You already added this product into your cart
+        <a class="btn btn-primary" routerLink="/cart">
+          Check Cart
+        </a>
+      </p>
+      <p class="lead text-warning" *ngIf="!authService.isLoggedIn()">
+        You should be logged in to add this product into your cart &nbsp;
+        <button class="btn btn-outline-warning" routerLink="/auth/login">
+          Login
+        </button>
+      </p>
+      <p class="lead">
+        <button class="btn btn-outline-primary" routerLink="/categories">Back to categories</button>
+      </p>
     </div>
   </div>
 </div>

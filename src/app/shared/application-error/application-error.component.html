@@ -1,1 +1,20 @@
-<p>application-error works!</p>
+<ng-template #errorTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      Attention
+    </h4>
+    <button type="button" class="close pull-right" aria-label="Close"
+            (click)="hide()"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body text-center">
+    <h1 class="text-danger">
+      An Error Occurred During This Process, Please Try Again
+    </h1>
+  </div>
+  <div class="modal-footer">
+    <a type="button" class="btn btn-primary" routerLink="/home"
+       (click)="hide()">Back To Home</a>
+    <button type="button" class="btn btn-primary" (click)="hide()">Close</button>
+  </div>
+</ng-template>

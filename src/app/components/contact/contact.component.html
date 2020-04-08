@@ -1,1 +1,61 @@
-<p>contact works!</p>
+<div class="container contact-form">
+  <div class="contact-image">
+    <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact"/>
+  </div>
+  <form [formGroup]="createContactDto" (ngSubmit)="onSubmit(newMessageTemplate)" novalidate>
+    <h3 class="text-dark" style="font-family: 'Anton', sans-serif">
+      Fill Your Message Information
+    </h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" formControlName="name" name="name" class="form-control"
+                 placeholder="Your Name *" required>
+        </div>
+        <div class="form-group">
+          <input type="email" formControlName="email" name="email" class="form-control"
+                 placeholder="Your Email *" required>
+        </div>
+        <div class="form-group">
+          <input type="text" formControlName="phone" name="phone" class="form-control"
+                 placeholder="Your Phone Number *" required>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" formControlName="title" name="title" class="form-control"
+                 placeholder="Subject *" required>
+        </div>
+        <div class="form-group">
+          <textarea type="text" style="width: 100%; height: 150px;" formControlName="message" name="message"
+                    class="form-control"
+                    placeholder="Your Message *" required>
+          </textarea>
+        </div>
+      </div>
+
+    </div>
+    <div class="row mt-3 justify-content-center">
+      <div class="col-md-12 justify-content-center">
+        <button type="submit" class="btn btn-success" [disabled]="!createContactDto.valid">
+          Send
+        </button>
+      </div>
+    </div>
+  </form>
+  <ng-template #newMessageTemplate>
+    <h2 mat-dialog-title>Do You Want To Send Another Message?</h2>
+    <mat-dialog-content class="mat-typography" style="width:700px; height: auto;">
+      <div class="btn-group">
+        <button type="button" class="btn btn-success" (click)="createContactDto.reset(); hideDialog();">
+          Yes
+        </button>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button class="btn btn-warning pull-right" mat-dialog-close (click)="hideDialog()">
+        Cancel
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+</div>
